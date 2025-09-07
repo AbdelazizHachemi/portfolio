@@ -20,11 +20,11 @@ const navItems = [
 
 
   return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b">
+        <nav className="top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="shrink-0">
-                <h3 className="tracking-tight">John Developer</h3>
+                <h3 className="tracking-tight">Abdelaziz Hachemi</h3>
               </div>
               
               {/* Desktop Navigation */}

@@ -1,7 +1,15 @@
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Github, Linkedin, Mail, Download, ArrowDown, Sparkles } from "lucide-react";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Download,
+  ArrowDown,
+  Sparkles,
+} from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -12,12 +20,15 @@ export function Hero() {
         <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-40 right-20 w-48 h-48 bg-secondary/30 rounded-full blur-3xl animate-pulse delay-700"></div>
         <div className="absolute bottom-40 left-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        
+
         {/* Grid pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="grid grid-cols-12 gap-4 h-full">
             {Array.from({ length: 12 }, (_, i) => (
-              <div key={i} className="border-r border-foreground/10 h-full"></div>
+              <div
+                key={i}
+                className="border-r border-foreground/10 h-full"
+              ></div>
             ))}
           </div>
         </div>
@@ -29,8 +40,8 @@ export function Hero() {
           <div className="space-y-8 text-center lg:text-left order-2 lg:order-1">
             {/* Status Badge */}
             <div className="flex justify-center lg:justify-start">
-              <Badge 
-                variant="secondary" 
+              <Badge
+                variant="secondary"
                 className="px-6 py-3 bg-primary/10 text-primary border border-primary/20 backdrop-blur-sm"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
@@ -40,83 +51,143 @@ export function Hero() {
 
             {/* Main Heading */}
             <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight">
                 <span className="block">Hello, I'm</span>
                 <span className="block bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">
-                  John Developer
+                  Hachemi Abdelaziz
                 </span>
               </h1>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-3">
                 <p className="text-xl sm:text-2xl text-muted-foreground max-w-lg">
-                  Senior Software Engineer crafting digital experiences with
-                  <span className="text-primary"> 5+ years</span> of expertise
+                  Software Engineer building production-grade apps with{" "}
+                  <span className="text-primary">
+                    React, Next.js & TypeScript
+                  </span>
                 </p>
-                
+
                 <p className="text-lg text-muted-foreground/80 max-w-md">
-                  Specializing in full-stack development, DevOps practices, and scalable solutions 
-                  that drive business growth.
+                  I focus on scalable systems (Node.js, Spring Boot, PostgreSQL,
+                  MongoDB) using microservices architecture, containerized
+                  deployments (Docker, Kubernetes, CI/CD), web security and
+                  blockchain integrations (Solidity & Chainlink).
+                </p>
+
+                {/* Catchphrase */}
+                <p className="mt-2 text-base sm:text-lg font-medium text-muted-foreground/90 max-w-xl italic">
+                  Full-stack + DevOps: production apps, scalable backends,
+                  secure by design.
                 </p>
               </div>
             </div>
-            
+
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="group relative overflow-hidden px-8 py-6">
-                <span className="relative z-10 flex items-center gap-2">
+              {/* Download (uses native download attribute) */}
+              <Button
+                asChild
+                size="lg"
+                className="group relative overflow-hidden px-8 py-6"
+              >
+                <a
+                  href="/AbdelazizResume.pdf"
+                  download="AbdelazizResume.pdf"
+                  aria-label="Download Hachemi Abdelaziz resume"
+                  className="relative z-10 flex items-center gap-2"
+                >
                   <Download className="h-5 w-5" />
                   Download Resume
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
               </Button>
-              
-              <Button 
-                variant="outline" 
-                size="lg" 
+
+              {/* View in new tab */}
+              <Button
+                variant="outline"
+                size="lg"
                 className="px-8 py-6 bg-background/50 backdrop-blur-sm border-primary/20 hover:bg-primary/10"
+                asChild
               >
-                View My Work
+                <a
+                  href="/AbdelazizResume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open resume in a new tab"
+                >
+                  View My Work
+                </a>
               </Button>
             </div>
 
-            {/* Social Links */}
+            {/* Social Links (asChild) */}
             <div className="flex gap-4 justify-center lg:justify-start">
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
                 className="h-12 w-12 rounded-full bg-background/50 backdrop-blur-sm border border-primary/10 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
               >
-                <Github className="h-5 w-5" />
+                <a
+                  href="https://github.com/AbdelazizHachemi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open GitHub profile"
+                  title="GitHub — Abdelaziz Hachemi"
+                >
+                  <Github className="h-5 w-5" />
+                  <span className="sr-only">GitHub</span>
+                </a>
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
                 className="h-12 w-12 rounded-full bg-background/50 backdrop-blur-sm border border-primary/10 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
               >
-                <Linkedin className="h-5 w-5" />
+                <a
+                  href="https://www.linkedin.com/in/abdelaziz-hachemi-1b4069249/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open LinkedIn profile"
+                  title="LinkedIn — Abdelaziz Hachemi"
+                >
+                  <Linkedin className="h-5 w-5" />
+                  <span className="sr-only">LinkedIn</span>
+                </a>
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+
+              <Button
+                asChild
+                variant="ghost"
+                size="icon"
                 className="h-12 w-12 rounded-full bg-background/50 backdrop-blur-sm border border-primary/10 hover:bg-primary/10 hover:border-primary/30 transition-all duration-300"
               >
-                <Mail className="h-5 w-5" />
+                <a
+                  href="mailto:az.hachemi@esi-sba.dz"
+                  aria-label="Send email to Abdelaziz Hachemi"
+                  title="Email — az.hachemi@esi-sba.dz"
+                >
+                  <Mail className="h-5 w-5" />
+                  <span className="sr-only">Email</span>
+                </a>
               </Button>
             </div>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-8 pt-8">
               <div className="text-center lg:text-left">
-                <div className="text-2xl md:text-3xl mb-1">50+</div>
+                <div className="text-2xl md:text-3xl mb-1">10+</div>
                 <div className="text-sm text-muted-foreground">Projects</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="text-2xl md:text-3xl mb-1">5+</div>
+                <div className="text-2xl md:text-3xl mb-1">3+</div>
                 <div className="text-sm text-muted-foreground">Years Exp</div>
               </div>
               <div className="text-center lg:text-left">
                 <div className="text-2xl md:text-3xl mb-1">100%</div>
-                <div className="text-sm text-muted-foreground">Client Satisfaction</div>
+                <div className="text-sm text-muted-foreground">
+                  Client Satisfaction
+                </div>
               </div>
             </div>
           </div>
@@ -127,20 +198,22 @@ export function Hero() {
               {/* Decorative Elements */}
               <div className="absolute -top-4 -left-4 w-72 h-72 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-3xl opacity-60"></div>
               <div className="absolute -bottom-4 -right-4 w-64 h-64 bg-gradient-to-tl from-accent/30 to-primary/10 rounded-full blur-3xl opacity-40"></div>
-              
+
               {/* Main Image Container */}
               <div className="relative z-10 group">
                 <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-sm border-4 border-background/50 shadow-2xl">
-                  <ImageWithFallback
+                  <Image
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
                     alt="John Developer - Senior Software Engineer"
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  
+
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent"></div>
                 </div>
-                
+
                 {/* Floating Badge */}
                 <div className="absolute -bottom-6 -right-6 bg-background/90 backdrop-blur-sm border border-primary/20 rounded-2xl px-6 py-4 shadow-xl">
                   <div className="flex items-center gap-3">
@@ -156,7 +229,9 @@ export function Hero() {
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
           <div className="flex flex-col items-center gap-2 animate-bounce">
-            <span className="text-sm text-muted-foreground">Scroll to explore</span>
+            <span className="text-sm text-muted-foreground">
+              Scroll to explore
+            </span>
             <ArrowDown className="h-5 w-5 text-muted-foreground" />
           </div>
         </div>

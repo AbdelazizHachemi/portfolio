@@ -1,14 +1,14 @@
-// import Footer from "@/components/footer";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
-export default function RootLayout({
+export default function Layout({
   children,
 }) {
   return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
+    <div className="flex flex-col h-screen bg-background transition-colors duration-300">
       <Header />
-      <main>{children}</main>
-      {/* <Footer /> */}
+      <main className="flex-1">{children}</main>
+      <Footer />
     </div>
   );
 }
