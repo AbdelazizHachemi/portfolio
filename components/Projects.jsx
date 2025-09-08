@@ -4,24 +4,27 @@ import { Button } from "./ui/button";
 import { ExternalLink, Github } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Projects() {
   const projects = [
     {
       title: "E-Commerce Platform",
       description:
-        "Full-stack e-commerce solution built with Next.js and Node.js. Features include user authentication, payment processing, and admin dashboard.",
+        "Full-stack e-commerce solution built with Next.js and Postgresql. Features include user authentication, payment processing, and admin dashboard.",
       image:
         "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
       technologies: [
         "Next.js",
-        "Node.js",
         "TypeScript",
         "PostgreSQL",
+        "Tailwind CSS",
+        "Prisma",
+        "NeonDB",
         "Docker",
       ],
-      github: "#",
-      demo: "#",
+      github: "https://github.com/AbdelazizHachemi/ProStore",
+      demo: "https://pro-store-vert.vercel.app/",
     },
     {
       title: "DevOps Automation Suite",
@@ -87,14 +90,27 @@ export function Projects() {
                   ))}
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" size="sm" className="gap-2">
+                  <Link
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Github className="h-4 w-4" />
                     Code
-                  </Button>
-                  <Button size="sm" className="gap-2">
-                    <ExternalLink className="h-4 w-4" />
-                    Demo
-                  </Button>
+                  </Link>
+                  <Link
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button size="sm" className="gap-2">
+                      <ExternalLink className="h-4 w-4" />
+                      Demo
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

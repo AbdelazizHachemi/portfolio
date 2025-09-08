@@ -203,7 +203,7 @@ export function Hero() {
               <div className="relative z-10 group">
                 <div className="relative w-80 h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-sm border-4 border-background/50 shadow-2xl">
                   <Image
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+                    src="/my_pic.png"
                     alt="John Developer - Senior Software Engineer"
                     width={400}
                     height={400}
