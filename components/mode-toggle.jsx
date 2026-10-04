@@ -15,7 +15,7 @@ export default function ModeToggle() {
   }, []);
 
   if (!mounted) {
-    return null;
+    return <span className="inline-block size-11" aria-hidden="true" />;
   }
 
   return (
@@ -23,7 +23,9 @@ export default function ModeToggle() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="focus-visible:ring focus-visible:ring-offset-0"
+          size="icon"
+          className="size-11"
+          aria-label="Color theme"
         >
           {theme === "system" ? (
             <SunMoon />
@@ -35,7 +37,7 @@ export default function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Appearence</DropdownMenuLabel>
+        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={theme === "system"}

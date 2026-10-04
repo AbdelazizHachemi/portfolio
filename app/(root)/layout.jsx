@@ -1,14 +1,17 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import { Footer } from "@/components/site/Footer";
+import { Nav } from "@/components/site/Nav";
 
-export default function Layout({
-  children,
-}) {
+export default function Layout({ children }) {
   return (
-    <div className="flex flex-col h-screen bg-background transition-colors duration-300">
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
+    <>
+      <a className="skip-link" href="#top">
+        Skip to content
+      </a>
+      <Nav />
+      <div id="site-content">
+        {children}
+        <Footer />
+      </div>
+    </>
   );
 }

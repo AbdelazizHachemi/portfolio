@@ -2,42 +2,32 @@
 
 import { useState } from "react";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import emailjs from "@emailjs/browser";
 
-const Alert = ({ children, type = "info" }) => {
-  const bgColor =
-    type === "success"
-      ? "bg-green-50"
-      : type === "error"
-        ? "bg-red-50"
-        : "bg-blue-50";
-  const textColor =
-    type === "success"
-      ? "text-green-800"
-      : type === "error"
-        ? "text-red-800"
-        : "text-blue-800";
-  const borderColor =
-    type === "success"
-      ? "border-green-200"
-      : type === "error"
-        ? "border-red-200"
-        : "border-blue-200";
+const EMAILJS_SERVICE_ID = "service_5ahep5f";
+const EMAILJS_TEMPLATE_ID = "template_k59wwbg";
+const EMAILJS_PUBLIC_KEY = "KjYLWIRHzNFA4JHkP";
+const TO_EMAIL = "az.hachemi@esi-sba.dz";
 
+const fieldClass =
+  "h-12 rounded-none bg-transparent px-3 text-base shadow-none md:text-base";
+
+function Status({ type, children }) {
+  const tone =
+    type === "success"
+      ? "border-copper text-foreground"
+      : "border-destructive text-destructive";
+  const Icon = type === "success" ? CheckCircle : AlertCircle;
   return (
-    <div className={`p-4 rounded-md border ${bgColor} ${borderColor}`}>
-      <div className={`flex items-center ${textColor}`}>
-        {type === "success" && <CheckCircle className="h-5 w-5 mr-2" />}
-        {type === "error" && <AlertCircle className="h-5 w-5 mr-2" />}
-        {children}
-      </div>
+    <div role="status" className={`flex items-start gap-2 border px-3 py-3 text-sm ${tone}`}>
+      <Icon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <p>{children}</p>
     </div>
   );
-};
+}
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -46,65 +36,37 @@ export default function ContactForm() {
     subject: "",
     message: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  // EmailJS Configuration - Replace with your actual values
-  const EMAILJS_SERVICE_ID = "service_5ahep5f"; // e.g., "service_abc123"
-  const EMAILJS_TEMPLATE_ID = "template_k59wwbg"; // e.g., "template_xyz789"
-  const EMAILJS_PUBLIC_KEY = "KjYLWIRHzNFA4JHkP"; // e.g., "user_mnop456"
-  const TO_EMAIL = "az.hachemi@esi-sba.dz"; // Your actual email address
-
   const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    const next = {};
+    if (!formData.name.trim()) next.name = "Name is required";
+    if (!formData.email.trim()) next.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      next.email = "Enter a valid email address";
     }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Subject is required";
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!formData.subject.trim()) next.subject = "Subject is required";
+    if (!formData.message.trim()) next.message = "Message is required";
+    setErrors(next);
+    return Object.keys(next).length === 0;
   };
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({
-        ...prev,
-        [field]: "",
-      }));
-    }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     setSubmitStatus(null);
 
     try {
-      const result = await emailjs.send(
+      await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         {
@@ -114,10 +76,8 @@ export default function ContactForm() {
           message: formData.message,
           to_email: TO_EMAIL,
         },
-        EMAILJS_PUBLIC_KEY // ✅ public key goes here as 4th argument
+        EMAILJS_PUBLIC_KEY,
       );
-
-      console.log("Email sent successfully:", result);
       setSubmitStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
@@ -129,89 +89,108 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Send a Message</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {submitStatus === "success" && (
-            <Alert type="success">
-              Message sent successfully! We'll get back to you soon.
-            </Alert>
-          )}
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="border border-border bg-panel p-5 sm:p-7"
+    >
+      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        Message
+      </p>
+      <div className="mt-5 space-y-4">
+        {submitStatus === "success" ? (
+          <Status type="success">Message sent. I will reply by email.</Status>
+        ) : null}
+        {submitStatus === "error" ? (
+          <Status type="error">
+            It did not send. Email az.hachemi@esi-sba.dz and I will get it.
+          </Status>
+        ) : null}
 
-          {submitStatus === "error" && (
-            <Alert type="error">
-              Failed to send message. Please try again later.
-            </Alert>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Input
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className={errors.name ? "border-red-500" : ""}
-                required
-              />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-              )}
-            </div>
-            <div>
-              <Input
-                placeholder="Your Email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className={errors.email ? "border-red-500" : ""}
-                required
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
-            </div>
-          </div>
-
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
+            <label htmlFor="name" className="mb-2 block text-sm">
+              Name
+            </label>
             <Input
-              placeholder="Subject"
-              value={formData.subject}
-              onChange={(e) => handleInputChange("subject", e.target.value)}
-              className={errors.subject ? "border-red-500" : ""}
-              required
+              id="name"
+              name="name"
+              autoComplete="name"
+              value={formData.name}
+              onChange={(event) => handleInputChange("name", event.target.value)}
+              aria-invalid={errors.name ? true : undefined}
+              className={fieldClass}
             />
-            {errors.subject && (
-              <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
-            )}
+            {errors.name ? (
+              <p className="mt-1 text-sm text-destructive">{errors.name}</p>
+            ) : null}
           </div>
-
           <div>
-            <Textarea
-              placeholder="Your Message"
-              rows={5}
-              value={formData.message}
-              onChange={(e) => handleInputChange("message", e.target.value)}
-              className={errors.message ? "border-red-500" : ""}
-              required
+            <label htmlFor="email" className="mb-2 block text-sm">
+              Email
+            </label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={formData.email}
+              onChange={(event) => handleInputChange("email", event.target.value)}
+              aria-invalid={errors.email ? true : undefined}
+              className={fieldClass}
             />
-            {errors.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.message}</p>
-            )}
+            {errors.email ? (
+              <p className="mt-1 text-sm text-destructive">{errors.email}</p>
+            ) : null}
           </div>
+        </div>
 
-          <Button
-            className="w-full flex items-center justify-center gap-2"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            <Send className="h-4 w-4" />
-            {isSubmitting ? "Sending..." : "Send Message"}
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+        <div>
+          <label htmlFor="subject" className="mb-2 block text-sm">
+            Subject
+          </label>
+          <Input
+            id="subject"
+            name="subject"
+            autoComplete="off"
+            value={formData.subject}
+            onChange={(event) => handleInputChange("subject", event.target.value)}
+            aria-invalid={errors.subject ? true : undefined}
+            className={fieldClass}
+          />
+          {errors.subject ? (
+            <p className="mt-1 text-sm text-destructive">{errors.subject}</p>
+          ) : null}
+        </div>
+
+        <div>
+          <label htmlFor="message" className="mb-2 block text-sm">
+            Message
+          </label>
+          <Textarea
+            id="message"
+            name="message"
+            rows={6}
+            value={formData.message}
+            onChange={(event) => handleInputChange("message", event.target.value)}
+            aria-invalid={errors.message ? true : undefined}
+            className="min-h-36 rounded-none bg-transparent px-3 py-3 text-base shadow-none md:text-base"
+          />
+          {errors.message ? (
+            <p className="mt-1 text-sm text-destructive">{errors.message}</p>
+          ) : null}
+        </div>
+
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          aria-busy={isSubmitting}
+          className="h-12 w-full rounded-none text-base active:scale-[0.98]"
+        >
+          <Send className="size-4" aria-hidden="true" />
+          {isSubmitting ? "Sending…" : "Send message"}
+        </Button>
+      </div>
+    </form>
   );
 }
